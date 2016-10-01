@@ -59,4 +59,8 @@ This formula works "out-of-the-box" and tested on those operating systems:
 - Ubuntu LTS 14.04
 
 
+Requirements:
+=============
+https://github.com/maratsh/systemd-formula
+
 .. vim: fenc=utf-8 spell spl=en cc=100 tw=99 fo=want sts=2 sw=2 et

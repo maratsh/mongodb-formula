@@ -1,16 +1,7 @@
 {%- from "mongodb/map.jinja" import ms with context -%}
+{% from 'systemd/macro/tasks.sls' import systemd_tasks %}
 
 mongos_package:
-{%- if ms.use_repo %}
-  {%- set os = salt['grains.get']('os') | lower() %}
-  {%- set code = salt['grains.get']('oscodename') %}
-  pkgrepo.managed:
-    - humanname: MongoDB.org Repo
-    - name: deb http://repo.mongodb.org/apt/{{ os }} {{ code }}/mongodb-org/stable multiverse
-    - file: /etc/apt/sources.list.d/mongodb-org.list
-    - keyid: EA312927
-    - keyserver: keyserver.ubuntu.com
-{%- endif %}
   pkg.installed:
     - name: {{ ms.mongos_package }}
 
@@ -29,6 +20,7 @@ mongos_group:
     - name: {{ ms.mongos_group }}
     - system: True
 
+{%- if 'path' in  ms.mongos_settings.systemLog %}
 mongos_log_path:
   file.directory:
 {%- if 'mongos_settings' in ms %}
@@ -40,7 +32,9 @@ mongos_log_path:
     - group: {{ ms.mongos_group }}
     - mode: 755
     - makedirs: True
+{% endif %}
 
+{%- if grains['init'] != 'systemd' %}
 mongos_init:
   file.managed:
     - name: /etc/init/mongos.conf
@@ -49,7 +43,9 @@ mongos_init:
     - user: root
     - group: root
     - mode: 644
-
+{% else %}
+{{ systemd_tasks(ms.service) }}
+{% endif %}
 mongos_config:
   file.managed:
     - name: {{ ms.conf_path }}

@@ -39,3 +39,16 @@ mongos:
 
   settings:
     port: 27017
+
+  service:
+    - name: mongos
+      unit:
+        - Description = mongos
+      service:
+        - ExecStart=/usr/bin/mongos --config /etc/mongos.conf
+        - Restart=always
+        - LimitNOFILE=8192
+        - User=mongodb
+      install:
+        - WantedBy=multi-user.target
+      immediate_restart: False
