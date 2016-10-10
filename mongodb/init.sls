@@ -1,11 +1,13 @@
 # This setup for mongodb assumes that the replica set can be determined from
 # the id of the minion
 
-{%- from 'mongodb/map.jinja' import mdb with context -%}
+{% from 'mongodb/map.jinja' import mdb with context %}
 
 
 include:
   - mongodb.repo
+
+
 
 mongodb_package:
   pkg.installed:

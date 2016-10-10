@@ -1,5 +1,5 @@
-{%- from 'mongodb/map.jinja' import mdb with context -%}
-{%- if mdb.use_repo %}
+{% from 'mongodb/map.jinja' import mdb with context %}
+{% if mdb.use_repo %}
 
   {%- if grains['os_family'] == 'Debian' %}
 
@@ -40,4 +40,4 @@ mongodb_repo:
 
   {%- endif %}
 
-{%- endif %}
+{% endif %}
